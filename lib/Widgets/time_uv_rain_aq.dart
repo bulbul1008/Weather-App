@@ -26,16 +26,16 @@ class TimeUvRainAq extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildColumn("TIME", time),
-          _buildColumn("UV", uv),
-          _buildColumn("%RAIN", rain),
-          _buildColumn("AQ", aq),
+          _underRow("TIME", time),
+          _underRow("UV", uv),
+          _underRow("%RAIN", rain),
+          _underRow("AQ", aq),
         ],
       ),
     );
   }
 
-  Widget _buildColumn(String title, String value) {
+  Widget _underRow(String title, String value) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

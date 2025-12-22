@@ -12,8 +12,8 @@ class LocationPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 30,
-      width: 172,
+      //height: 30,
+      //width: 172,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
