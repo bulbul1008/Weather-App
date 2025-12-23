@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dotted_line_flutter/dotted_line_flutter.dart';
 class SunsetSunrise extends StatelessWidget{
   final String sunrise;
   final String sunset;
@@ -14,15 +15,15 @@ Widget build (BuildContext context){
   return Container(
     alignment: Alignment.center,
     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20,),
-    width: 327,
-    height: 229,
+    // width: 327,
+    // height: 229,
     decoration: BoxDecoration(
       color: Color(0xffFDFCFC),
       borderRadius: BorderRadius.circular(11),
     ),
     child: Container(
-      height: 99,
-      width: 290,
+      // height: 99,
+      // width: 290,
       child: Column(
 
         children: [
@@ -59,12 +60,29 @@ Widget build (BuildContext context){
                 style: TextStyle(
                   color: Color(0xff9A9A9A),
                 ),),
+              DottedLine(
+                axis: Axis.vertical,
+                lineThickness: 3,
+                dashGap: 2,
+                colors: [Colors.orange, Colors.purple],
+                shadowColor: Colors.black,
+                shadowBlurRadius: 30,
+              ),
               Text(sunset,
                 style: TextStyle(
                   color: Color(0xff9A9A9A),
                 ),
               )
             ],
+          ),
+          SizedBox(height:10 ,),
+          DottedLine(
+            axis: Axis.horizontal,
+            lineThickness: 3,
+            dashGap: 6,
+            colors: [Colors.orange, Colors.purple],
+            shadowColor: Colors.black,
+            shadowBlurRadius: 10.0,
           ),
           Row(
             children: [
