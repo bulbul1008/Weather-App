@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LocationPart extends StatelessWidget {
-  final String cityName;
+  final String location;
 
   const LocationPart({
     super.key,
-    required this.cityName,
+    required this.location,
   });
 
   @override
@@ -18,7 +18,7 @@ class LocationPart extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            cityName,
+            location,
             style: const TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -28,8 +28,6 @@ class LocationPart extends StatelessWidget {
           const SizedBox(width: 6),
           SvgPicture.asset(
             'lib/MyIcons/location_icon.svg',
-            width: 21,
-            height: 21,
           ),
         ],
       ),

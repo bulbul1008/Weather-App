@@ -17,8 +17,10 @@ class TimeUvRainAq extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 327,
-      height: 59,
+      // width: 327,
+      // height: 59,
+      margin:EdgeInsetsGeometry.directional(start: 20,end: 20),
+      padding: EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 16),
       decoration: BoxDecoration(
         color: Color(0xffFDFCFC),
         borderRadius: BorderRadius.circular(11),

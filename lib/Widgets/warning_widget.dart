@@ -17,8 +17,11 @@ class WarningWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsetsGeometry.directional(start: 20,end: 20),
-      color: Color(0xffFDFCFC),
       padding: EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(11),
+        color: Color(0xffFDFCFC),
+      ),
       child: Column(
         children: [
           Row(

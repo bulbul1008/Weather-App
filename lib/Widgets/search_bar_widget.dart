@@ -6,29 +6,31 @@ class SearchBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:const EdgeInsets.symmetric(horizontal: 16),
-      width: 327,
-      height: 46,
+      margin: EdgeInsetsGeometry.directional(start: 20,end: 20),
+      padding: EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 16),
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(11),
         color: Color(0xffFDFCFC),
-        borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
 
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            //padding: EdgeInsetsGeometry.all(),
-            height: 23,
-            width: 121,
             child:
-              Text("Search Locationa",
-              style: TextStyle(
-                fontSize: 15,
-                color: Color(0xffC4C4C4),
-                //height: 23,
-               // fontWeight: FontWeight.normal,
-              ),),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search Location",
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xffC4C4C4),
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+
           ),
           Icon(Icons.search,
           color: Color(0xffC4C4C4),),

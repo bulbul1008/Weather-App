@@ -1,50 +1,42 @@
 import 'package:flutter/material.dart';
 
 class TopIndicator extends StatelessWidget {
-  const TopIndicator({super.key});
+  final int currentIndex;
+  final int totalPages;
+
+  const TopIndicator({
+    super.key,
+    required this.currentIndex,
+    this.totalPages = 3,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 80,
       height: 22,
-      color: Color(0xffFDFCFC),
-      padding:const EdgeInsets.symmetric(horizontal: 16),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: 8,
-              height:8,
-              decoration:BoxDecoration(
-                color: Color(0xffC4C4C4),
-                shape: BoxShape.circle,
-              ),
-            ),
-            //SizedBox(width: 7,),
-            Container(
-              width: 8,
-              height:8,
-              decoration:BoxDecoration(
-                color: Color(0xff001F70),
-                shape: BoxShape.circle,
-              ),
-            ),
-           // SizedBox(width: 7,),
-            Container(
-              width: 8,
-              height:8,
-              decoration:BoxDecoration(
-                color: Color(0xffC4C4C4),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ],
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xffFDFCFC),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(totalPages, (index) {
+          final bool isActive = index == currentIndex;
 
-        ),
+          return Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isActive
+                  ? const Color(0xff001F70)
+                  : const Color(0xffC4C4C4),
+            ),
+          );
+        }),
       ),
     );
-
   }
 }
