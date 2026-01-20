@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/Widgets/location_bar.dart';
 import 'package:weather_app/Widgets/location_part.dart';
 import 'package:weather_app/Widgets/search_bar_widget.dart';
+import 'package:weather_app/Widgets/temparature_widget.dart';
 import 'package:weather_app/Widgets/time_uv_rain_aq.dart';
 import 'package:weather_app/Widgets/top_indicator.dart';
 import 'package:weather_app/Widgets/sunset_sunrise.dart';
 import 'package:weather_app/Widgets/warning_widget.dart';
 import 'package:weather_app/models/weather.dart';
+import 'package:weather_app/pages/search_page.dart';
 import 'package:weather_app/services/weather_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,14 +20,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
-  final ValueNotifier<int> currentPage = ValueNotifier(1);
+  final ValueNotifier<int> currentPage = ValueNotifier(0);
+
+  List<Weather> allWeather = [];
+  List<Weather> filteredWeather = [];
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-      viewportFraction: 0.98,
-    );
+    _pageController = PageController(viewportFraction: 0.98);
   }
 
   @override
@@ -33,6 +36,21 @@ class _HomePageState extends State<HomePage> {
     _pageController.dispose();
     currentPage.dispose();
     super.dispose();
+  }
+
+  void filterWeather(String query) {
+    if (query.isEmpty) {
+      filteredWeather = allWeather;
+    } else {
+      filteredWeather = allWeather.where((weather) {
+        return weather.location.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    }
+
+    currentPage.value = 0;
+    _pageController.jumpToPage(0);
+
+    setState(() {});
   }
 
   @override
@@ -43,20 +61,49 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder<List<Weather>>(
         future: WeatherService().getWeatherList(),
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-          final weatherList = snapshot.data!;
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text("No data found"));
+          }
+
+
+          if (allWeather.isEmpty) {
+            allWeather = snapshot.data!;
+            filteredWeather = allWeather;
+          }
+
           return Column(
             children: [
               const SizedBox(height: 20),
-              const SearchBarWidget(),
+
+              SearchBarWidget(
+                onTap: () async {
+                  final Weather? selectedWeather = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SearchPage()),
+                  );
+
+                  if (selectedWeather != null) {
+                    filteredWeather = [selectedWeather];
+                    currentPage.value = 0;
+                    _pageController.jumpToPage(0);
+                    setState(() {});
+                  }
+                },
+              ),
+
+
               const SizedBox(height: 20),
 
               ValueListenableBuilder<int>(
                 valueListenable: currentPage,
                 builder: (context, index, _) {
                   return TopIndicator(
-                    currentIndex: index % 4,
-                    totalPages: 4,
+                    currentIndex: index % filteredWeather.length,
+                    totalPages: filteredWeather.length,
                   );
                 },
               ),
@@ -66,12 +113,12 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
-                  itemCount: weatherList.length,
+                  itemCount: filteredWeather.length,
                   onPageChanged: (index) {
                     currentPage.value = index;
                   },
                   itemBuilder: (context, index) {
-                    final weather = weatherList[index];
+                    final weather = filteredWeather[index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -79,17 +126,19 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           children: [
                             LocationPart(location: weather.location),
+                            const SizedBox(height: 16),
 
+                            TemparatureWidget(
+                              temparature: weather.temperature,
+                            ),
                             const SizedBox(height: 16),
 
                             if (weather.warnings != null)
                               WarningWidget(
                                 rain: weather.warnings!.rainPercentage,
                                 expTime: weather.warnings!.expectedTime,
-                                warningTitle:
-                                weather.warnings!.warningTitle,
+                                warningTitle: weather.warnings!.warningTitle,
                               ),
-
                             const SizedBox(height: 16),
 
                             TimeUvRainAq(
@@ -98,7 +147,6 @@ class _HomePageState extends State<HomePage> {
                               rain: weather.rainPercentage,
                               aq: weather.airQuality,
                             ),
-
                             const SizedBox(height: 20),
 
                             SunsetSunrise(
@@ -106,7 +154,6 @@ class _HomePageState extends State<HomePage> {
                               sunset: weather.sunset,
                               day_length: weather.dayLength,
                             ),
-
                             const SizedBox(height: 20),
 
                             LocationBar(
@@ -116,7 +163,6 @@ class _HomePageState extends State<HomePage> {
                               warningTitle:
                               weather.warnings?.warningTitle ?? "",
                             ),
-
                             const SizedBox(height: 20),
                           ],
                         ),
