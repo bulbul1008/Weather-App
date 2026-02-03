@@ -2,21 +2,26 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:weather_app/models/weather.dart';
 
-
-
 class WeatherService {
-
   Future<List<Weather>> getWeatherList() async {
-    final String jsonString =
-    await rootBundle.loadString('assets/data/weather.json');
+    try {
+      // Load local JSON from assets
+      final String jsonString =
+      await rootBundle.loadString('assets/data/weather.json');
 
-    final Map<String, dynamic> decodedJson =
-    jsonDecode(jsonString);
+      // Decode JSON
+      final Map<String, dynamic> decodedJson =
+      jsonDecode(jsonString);
 
-    final List weatherList = decodedJson['weatherData'];
+      // Extract weather list
+      final List weatherList = decodedJson['weatherData'];
 
-    return weatherList
-        .map((item) => Weather.fromJson(item))
-        .toList();
+      // Convert JSON map to Weather model
+      return weatherList
+          .map<Weather>((item) => Weather.fromJson(item))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to load weather data');
+    }
   }
 }

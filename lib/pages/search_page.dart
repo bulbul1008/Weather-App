@@ -17,7 +17,7 @@ class _SearchPageState extends State<SearchPage> {
   List<Weather> filteredWeather = [];
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     _loadWeather();
   }
@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
         return weather.location.toLowerCase().contains(query.toLowerCase());
       }).toList();
     }
-    setState(() {});
+   setState(() {});
   }
 
   @override
